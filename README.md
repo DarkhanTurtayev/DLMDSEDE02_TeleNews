@@ -22,9 +22,9 @@ REQUIREMENTS:
 
 **How to Start?**
 
-  Clone or Download Repo
-  run Docker
-  Go to folder in Terminal `cd yourfilesystem/DLMDSEDE02_TeleNews`
+  Clone or Download Repo\
+  run Docker\
+  Go to folder in Terminal `cd yourfilesystem/DLMDSEDE02_TeleNews`\
   run Docker Compose `docker compose up --build`
 
 TODO:
