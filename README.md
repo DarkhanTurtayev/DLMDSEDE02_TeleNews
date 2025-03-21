@@ -31,15 +31,15 @@ REQUIREMENTS:
 You should be able to see 3 Panels with various data: WordCloud, Frequency Chart, NewsFeed
 
 
-**Default Access** /
+**Default Access** 
 
-	• Grafana: http://localhost:3000/
-	• Username: admin/
-	• Password: admin/
-	• PostgreSQL: http://localhost:5432/
-	• Database: spark_db/
-	• Username: admin/
-	• Password: admin/
+	• Grafana: http://localhost:3000
+	• Username: admin
+	• Password: admin
+	• PostgreSQL: http://localhost:5432
+	• Database: spark_db
+	• Username: admin
+	• Password: admin
 
 TODO:
 
