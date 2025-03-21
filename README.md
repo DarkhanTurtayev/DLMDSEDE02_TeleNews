@@ -1,4 +1,4 @@
-# TeleNews — Real-Time News Trends & Analys from Telegram Channels 
+# TeleNews — Real-Time News Trends Analysis from Telegram Channels 
 
 **TeleNews** is a real-time news trend analytics system powered by streaming technologies.
 
