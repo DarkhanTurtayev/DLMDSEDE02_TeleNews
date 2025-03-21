@@ -30,7 +30,7 @@ REQUIREMENTS:
 
 You should be able to see 3 Panels with various data: WordCloud, Frequency Chart, NewsFeed
 
-![Example of Panel (WordCloud)](https://github.com/DarkhanTurtayev/DLMDSEDE02_TeleNews/edit/main/Images/WordCloudExample.png)
+![Example of Panel (WordCloud)](https://github.com/DarkhanTurtayev/DLMDSEDE02_TeleNews/blob/main/Images/WordCloudExample.png)
 
 **Default Access** 
 
