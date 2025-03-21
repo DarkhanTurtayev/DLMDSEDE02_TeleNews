@@ -40,6 +40,7 @@ You should be able to see 3 Panels with various data: WordCloud, Frequency Chart
 	•	Username: admin
 	•	Password: admin
 
+
 TODO:
 
 Create bash file for auto setup of containers in one click.
