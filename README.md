@@ -7,17 +7,17 @@ This streming pipline could be effective for high-traffic news channels like cry
 
 IMPORTANT: Due to Telegram’s policy, bots are not allowed to scrape content from the channels unless they are administrators of those channels.
 
-Therefore, the final user is expected to:
-	•	Create their own aggregation channel.
+Therefore, the final user is expected to:\
+	•	Create their own aggregation channel.\
 	•	Add a third-party forwarding bot-service (@AutoForwardMe for example), to forward the messages from the channels of interest to their own channel
-    where bot have admin rights.
+    where bot have admin rights.\
   • Insert their own Bot API Key into .env file to connect pipeline to their personal news stream.
 
 This way, users can tailor the incoming news to their own interests while staying compliant with Telegram’s API rules.
 
 REQUIREMENTS:
 
-  • Python 3.10+
+  • Python 3.10+\
   • Docker
 
 **How to Start?**
@@ -28,10 +28,11 @@ REQUIREMENTS:
   run Docker Compose `docker compose up --build`
 
 TODO:
+
 Create bash file for auto setup of containers in one click.
 
 PLANS:
 
-Add NLP Translation tool to autotranslate and extract info from even more channels
+Add NLP Translation tool to autotranslate and extract info from even more channels\
 Integrate NLP model for extracting actionable insights from news, such as detecting key events, entities, and sentiment trends formt the newsstream. 
 
