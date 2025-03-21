@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  bot: 
+    build: ./bot
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1     #IMPORTANT, otherwise not receiving message in live-mode
+    networks:
+      - telenews_default
+    depends_on:
+      - kafka
+
+  kafka:
+    image: bitnami/kafka:latest
+    ports:
+      - "9092:9092"
+    networks:
+      - telenews_default
+    environment:
+      KAFKA_CFG_NODE_ID: 0
+      KAFKA_CFG_PROCESS_ROLES: broker,controller
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CFG_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://:9093
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092  #or localhost:9092 to test changes in spark script on fly
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+  spark:
+    build: ./spark
+    container_name: spark-master
+    environment:
+      - SPARK_MODE=master
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    networks:
+      - telenews_default
+    volumes:
+      - ./spark:/opt/spark
+    command: > #entrypoint for spark
+      sh -c "/opt/spark/entrypoint.sh"
+
+  spark-worker:
+    build: ./spark
+    container_name: spark-worker
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - spark
+    networks:
+      - telenews_default
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: telenews_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: admin     
+      POSTGRES_PASSWORD: admin        
+      POSTGRES_DB: spark_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:             
+      - telenews_default
+
+  grafana:
+    build: ./grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - telenews_default
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - postgres
+    volumes:
+      - ./grafana/grafa_backup:/var/lib/grafana
+
+    restart: unless-stopped
+    command: >
+      sh -c "
+        /run.sh &
+        sleep 5 &&
+        python -m webbrowser http://localhost:3000
+      "
+
+volumes:
+  pgdata:
+
+networks:
+  telenews_default:
