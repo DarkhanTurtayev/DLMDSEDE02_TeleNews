@@ -1,4 +1,4 @@
-# TeleNews — Real-Time News Trends & Analys from Telegram Channels 
+# TeleNews — Real-Time News Trends Analysis from Telegram Channels 
 
 **TeleNews** is a real-time news trend analytics system powered by streaming technologies.
 
@@ -30,6 +30,7 @@ REQUIREMENTS:
 
 You should be able to see 3 Panels with various data: WordCloud, Frequency Chart, NewsFeed
 
+![Example of Panel (WordCloud)](https://github.com/DarkhanTurtayev/DLMDSEDE02_TeleNews/blob/main/Images/WordCloudExample.png)
 
 **Default Access** 
 
