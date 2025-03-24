@@ -3,7 +3,7 @@ version: '3.8'
 services:
   bot: 
     build: ./bot
-    container_name: telenews_bot_1
+    container_name: telenews-bot-1
     env_file:
       - .env
     environment:
@@ -15,7 +15,7 @@ services:
 
   kafka:
     image: bitnami/kafka:latest
-    container_name: telenews_kafka_1
+    container_name: telenews-kafka-1
     ports:
       - "9092:9092"
     networks:
