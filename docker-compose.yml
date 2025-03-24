@@ -86,7 +86,7 @@ services:
     depends_on:
       - postgres
     volumes:
-      - ./grafana/grafa_backup:/var/lib/grafana
+      - ./grafana/grafana_backup:/var/lib/grafana
 
     restart: unless-stopped
     command: >

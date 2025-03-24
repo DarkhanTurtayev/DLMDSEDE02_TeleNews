@@ -44,7 +44,7 @@ message_queue = asyncio.Queue() #important when message arrrive at the same time
 #message receiving logic
 @dp.channel_post()
 async def handle_message(message: types.Message):
-    text = message.html_text or message.text or message.caption or "EMPTY"
+    text = message.html_text or message.text or message.caption or ""
     print(f"Message received: {text}")
     await message_queue.put(text)
     print(f"Message queued: {text}")
