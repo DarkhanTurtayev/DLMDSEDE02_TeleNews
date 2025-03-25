@@ -15,6 +15,8 @@ Therefore, the final user is expected to:\
 
 This way, users can tailor the incoming news to their own interests while staying compliant with Telegram’s API rules.
 
+UPDATE 1.01: Added filter to ignore href/https links to appear in WordCloud
+
 REQUIREMENTS:
 
   • Python 3.10+\
@@ -27,6 +29,14 @@ REQUIREMENTS:
   Go to folder in Terminal `cd yourfilesystem/DLMDSEDE02_TeleNews`\
   run Docker Compose `docker compose up --build`\
   Open `http://localhost:3000` to access Grafana Dashboard\
+
+  OR 
+  run run.sh file for auto-init:\
+  `chmod +x run.sh`\
+  `./run.sh`
+
+  !!! Please refresh appeared browser window, Grafana might take some time to load !!!\
+  
 
 You should be able to see 3 Panels with various data: WordCloud, Frequency Chart, NewsFeed
 
@@ -42,9 +52,6 @@ You should be able to see 3 Panels with various data: WordCloud, Frequency Chart
 	• Username: admin
 	• Password: admin
 
-TODO:
-
-Create bash file for auto setup of containers in one click.
 
 PLANS:
 
