@@ -3,6 +3,7 @@ from pyspark.sql.functions import col, explode, split, lower, regexp_replace, co
 import sys
 import nltk
 from nltk.corpus import stopwords
+# from pyspark.sql.functions import window
 
 # ignore words (a, the, for, it etc.)
 nltk.download('stopwords')
@@ -21,11 +22,13 @@ df = spark.readStream.format("kafka").option("kafka.bootstrap.servers", "telenew
 df = df.withColumn("timestamp", to_timestamp(col("timestamp"))) 
 
 # messages normalization + links filtration
+
+
 words = df.select(explode(split(lower(regexp_replace(col("message"), r'(https?://\S+|href="[^"]*"|/b|/b|\*\*|[^a-zA-Z\s])', '')),"\s+")).alias("word"),
                   col("timestamp")).filter(~col("word").isin(ignore))
 
 # main logic (sort words frequency)
-trends = words.withWatermark("timestamp", "30 minutes").groupBy("word").agg(count("word").alias("count"), spark_max("timestamp").alias("last_timestamp")).orderBy(col("count").desc())
+trends = words.groupBy("word").agg(count("word").alias("count"), spark_max("timestamp").alias("last_timestamp")).orderBy(col("count").desc())
 activity = df.select(col("message"), col("timestamp"))
 
 
@@ -50,7 +53,7 @@ query_console = trends.writeStream \
 
 # to db 
 query_postgres_trends = trends.writeStream \
-    .outputMode("append") \
+    .outputMode("complete") \
     .foreachBatch(lambda df, epoch: df.write \
         .format("jdbc") \
         .option("url", "jdbc:postgresql://postgres:5432/spark_db") \
@@ -58,7 +61,7 @@ query_postgres_trends = trends.writeStream \
         .option("user", "admin") \
         .option("password", "admin") \
         .option("driver", "org.postgresql.Driver") \
-        .mode("append") \
+        .mode("overwrite") \
         .save()) \
     .trigger(processingTime="30 seconds") \
     .start()
