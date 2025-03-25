@@ -25,7 +25,7 @@ words = df.select(explode(split(lower(regexp_replace(col("message"), r'(https?:/
                   col("timestamp")).filter(~col("word").isin(ignore))
 
 # main logic (sort words frequency)
-trends = words.groupBy("word").agg(count("word").alias("count"), spark_max("timestamp").alias("last_timestamp")).orderBy(col("count").desc())
+trends = words.withWatermark("timestamp", "30 minutes").groupBy("word").agg(count("word").alias("count"), spark_max("timestamp").alias("last_timestamp")).orderBy(col("count").desc())
 activity = df.select(col("message"), col("timestamp"))
 
 
