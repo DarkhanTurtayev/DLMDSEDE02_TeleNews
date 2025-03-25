@@ -28,6 +28,11 @@ def wait_for_kafka():
                 max_block_ms=10000
             )
             print("SUCCESS: Kafka Connected")
+
+            producer.send("telegram_news", "Kafka activation message".encode("utf-8"))
+            producer.flush()
+            print("Initial message sent to activate Kafka topic and db")
+
             return producer
         
         except NoBrokersAvailable:

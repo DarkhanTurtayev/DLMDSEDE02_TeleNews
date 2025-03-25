@@ -20,8 +20,8 @@ df = spark.readStream.format("kafka").option("kafka.bootstrap.servers", "telenew
     .selectExpr("CAST(value AS STRING) AS message", "timestamp")
 df = df.withColumn("timestamp", to_timestamp(col("timestamp"))) 
 
-# messages normalization
-words = df.select(explode(split(lower(regexp_replace(col("message"), r'/b|/b|\*\*|[^a-zA-Z\s]', '')),"\s+")).alias("word"),
+# messages normalization + links filtration
+words = df.select(explode(split(lower(regexp_replace(col("message"), r'(https?://\S+|href="[^"]*"|/b|/b|\*\*|[^a-zA-Z\s])', '')),"\s+")).alias("word"),
                   col("timestamp")).filter(~col("word").isin(ignore))
 
 # main logic (sort words frequency)
@@ -50,7 +50,7 @@ query_console = trends.writeStream \
 
 # to db 
 query_postgres_trends = trends.writeStream \
-    .outputMode("complete") \
+    .outputMode("append") \
     .foreachBatch(lambda df, epoch: df.write \
         .format("jdbc") \
         .option("url", "jdbc:postgresql://postgres:5432/spark_db") \
@@ -58,7 +58,7 @@ query_postgres_trends = trends.writeStream \
         .option("user", "admin") \
         .option("password", "admin") \
         .option("driver", "org.postgresql.Driver") \
-        .mode("overwrite") \
+        .mode("append") \
         .save()) \
     .trigger(processingTime="30 seconds") \
     .start()
